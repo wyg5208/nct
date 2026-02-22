@@ -97,7 +97,8 @@ NCT/
 ├── tests/                  # Test suite
 │   └── test_basic.py       # Basic functionality tests
 │
-├── visualization/          # Visualization tools (in development)
+├── visualization/          # Visualization tools
+│   └── nct_dashboard.py    # Streamlit real-time dashboard 🎨
 │
 ├── docs/                   # Documentation
 │   └── NCT Implementation Plan.md
@@ -106,6 +107,26 @@ NCT/
     └── neuroconscious_paper/
         ├── NCT_arXiv.tex   # LaTeX source
         └── NCT_arXiv.pdf   # Compiled PDF
+```
+
+---
+
+## 🎨 Visualization Dashboard
+
+NCT provides a **Streamlit**-based real-time visualization dashboard featuring:
+
+- **Real-time Monitoring**: Dynamic tracking of Φ value, Free Energy, and Attention Weights
+- **Interactive Parameters**: Adjust model dimension, attention heads, γ-wave frequency, etc.
+- **Multi-candidate Competition Visualization**: Display candidate competition in global workspace
+- **Bilingual Interface**: English/Chinese language switching
+- **Data Export**: Export experiment data in CSV format
+
+```bash
+# Install dependencies
+pip install streamlit plotly pandas
+
+# Launch dashboard
+streamlit run visualization/nct_dashboard.py
 ```
 
 ---
@@ -248,8 +269,8 @@ python experiments/run_all_experiments.py
 # View results
 ls experiments/results/
 
-# Visualize results (in development)
-python visualization/plot_results.py
+# Run real-time visualization dashboard
+streamlit run visualization/nct_dashboard.py
 ```
 
 ### Custom Experiments
@@ -278,12 +299,13 @@ for trial in range(100):
 
 ## 📚 References
 
-1. Vaswani et al. (2017). Attention Is All You Need
-2. Dehaene & Changeux (2011). Experimental and theoretical approaches to conscious processing
-3. Friston (2010). The free-energy principle: a unified brain theory
-4. Tononi (2008). Consciousness as integrated information
-5. Bi & Poo (1998). Synaptic modifications by STDP
-6. Fries (2005). Gamma oscillations and communication
+1. Millidge, Tschantz & Buckley (2022). Predictive coding approximates backprop along arbitrary computation graphs. *Neural Computation*
+2. Vaswani et al. (2017). Attention Is All You Need
+3. Dehaene & Changeux (2011). Experimental and theoretical approaches to conscious processing
+4. Friston (2010). The free-energy principle: a unified brain theory
+5. Tononi (2008). Consciousness as integrated information
+6. Bi & Poo (1998). Synaptic modifications by STDP
+7. Fries (2005). Gamma oscillations and communication
 
 ### 📄 Related Papers
 

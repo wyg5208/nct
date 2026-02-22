@@ -94,7 +94,8 @@ NCT/
 ├── tests/                  # 测试套件
 │   └── test_basic.py       # 基础功能测试
 │
-├── visualization/          # 可视化工具（待开发）
+├── visualization/          # 可视化工具
+│   └── nct_dashboard.py    # Streamlit 实时仪表盘 🎨
 │
 ├── docs/                   # 文档
 │   └── NCT 完整实施方案.md
@@ -103,6 +104,26 @@ NCT/
     └── neuroconscious_paper/
         ├── NCT_arXiv.tex   # LaTeX 源文件
         └── NCT_arXiv.pdf   # 编译后 PDF
+```
+
+---
+
+## 🎨 可视化仪表盘
+
+NCT 提供基于 **Streamlit** 的实时可视化仪表盘，支持：
+
+- **实时监控**: Φ值、自由能、注意力权重动态变化
+- **交互调参**: 模型维度、注意力头数、γ波频率等
+- **多候选竞争可视化**: 展示全局工作空间中的候选竞争过程
+- **双语界面**: 支持中英文切换
+- **数据导出**: CSV 格式导出实验数据
+
+```bash
+# 安装依赖
+pip install streamlit plotly pandas
+
+# 启动仪表盘
+streamlit run visualization/nct_dashboard.py
 ```
 
 ---
@@ -245,8 +266,8 @@ python experiments/run_all_experiments.py
 # 查看结果
 ls experiments/results/
 
-# 可视化结果（待开发）
-python visualization/plot_results.py
+# 运行实时可视化仪表盘
+streamlit run visualization/nct_dashboard.py
 ```
 
 ### 自定义实验
@@ -275,12 +296,13 @@ for trial in range(100):
 
 ## 📚 参考文献
 
-1. Vaswani et al. (2017). Attention Is All You Need
-2. Dehaene & Changeux (2011). Experimental and theoretical approaches to conscious processing
-3. Friston (2010). The free-energy principle: a unified brain theory
-4. Tononi (2008). Consciousness as integrated information
-5. Bi & Poo (1998). Synaptic modifications by STDP
-6. Fries (2005). Gamma oscillations and communication
+1. Millidge, Tschantz & Buckley (2022). Predictive coding approximates backprop along arbitrary computation graphs. *Neural Computation*
+2. Vaswani et al. (2017). Attention Is All You Need
+3. Dehaene & Changeux (2011). Experimental and theoretical approaches to conscious processing
+4. Friston (2010). The free-energy principle: a unified brain theory
+5. Tononi (2008). Consciousness as integrated information
+6. Bi & Poo (1998). Synaptic modifications by STDP
+7. Fries (2005). Gamma oscillations and communication
 
 ### 📄 相关论文
 
