@@ -1,21 +1,26 @@
-# NCT v3.0 核心依赖
+# NCT v3.0 core
 # NeuroConscious Transformer Requirements
 
-# 深度学习框架
+# deep learning framework
 torch>=2.0.0
 
-# 科学计算
+# scientific computing
 numpy>=1.24.0
 scipy>=1.10.0
 
-# 可选：可视化工具（开发/研究用）
+# optional: visualization tools (for development/research use)
 # matplotlib>=3.7.0
 # seaborn>=0.12.0
 
-# 可选：GUI Dashboard（演示用）
+# Streamlit Dashboard (recommended - Web visualization)
+streamlit>=1.30.0
+plotly>=5.18.0
+pandas>=2.0.0
+
+# optional: GUI Dashboard (demo purpose)
 # PySide6>=6.5.0
 # pyqtgraph>=0.13.0
 
-# 可选：Jupyter Notebook（交互式探索）
+# optional: Jupyter Notebook (interactive exploration)
 # jupyter>=1.0.0
 # ipywidgets>=8.0.0

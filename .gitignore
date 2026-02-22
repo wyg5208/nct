@@ -73,6 +73,11 @@ experiments/results/*.json
 experiments/results/*.csv
 experiments/results/*.pkl
 
+#docs
+/docs/
+/neuroconscious_paper/
+.qoder/
+
 # Temp files
 *.swp
 *.swo

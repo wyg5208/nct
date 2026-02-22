@@ -33,7 +33,7 @@ def forward_with_sequence(self, sensory_sequence):
     for i, layer in enumerate(self.layers):
         # 该层的预测（使用完整的 Transformer Decoder）
         try:
-            prediction, hidden = layer(x)
+            prediction, hidden = layer.forward(x)
             
             # 计算预测误差
             if i == 0:
@@ -50,14 +50,24 @@ def forward_with_sequence(self, sensory_sequence):
             
             # 传递到下一层（自下而上）
             if i < len(self.layers) - 1:
-                x = self.bottom_up_projections[i](hidden).unsqueeze(1)  # [B, 1, next_D]
+                # hidden shape: [B, T, D_next]
+                # 确保是 3D 张量
+                if hidden.dim() == 2:
+                    hidden = hidden.unsqueeze(1)  # [B, 1, D_next]
+                x = self.bottom_up_projections[i](hidden)  # [B, T, D_next]
         except Exception as e:
             from logging import getLogger
+            import traceback
             logger = getLogger(__name__)
-            logger.warning(f"[PredictiveHierarchy] Layer {i} 处理失败：{e}，跳过")
+            logger.warning(f"[PredictiveHierarchy] Layer {i} 处理失败：{e}")
+            logger.warning(f"Traceback:\n{traceback.format_exc()}")
             results['predictions'].append(torch.zeros(B, D))
-            results['errors'].append(torch.tensor(0.5))
+            results['errors'].append(torch.zeros(B, D))  # 修复：返回与 prediction 相同形状的 tensor
             results['hidden_states'].append(torch.zeros(B, T, D))
+            
+            # 继续传递到下一层（使用零向量）
+            if i < len(self.layers) - 1:
+                x = torch.zeros(B, 1, self.bottom_up_projections[i].out_features)
     
     # 总自由能
     total_free_energy = sum(

@@ -123,12 +123,10 @@ class PredictiveCodingDecoder(nn.TransformerDecoder):
         if memory is None:
             memory = x  # decoder-only: 使用自身作为 memory
         
-        # Step 4: Transformer 前向传播
-        hidden_states = super().forward(
-            tgt=x,
-            memory=memory,
-            tgt_mask=causal_mask,
-        )
+        # Step 4: Transformer 前向传播（逐层传递）
+        hidden_states = x
+        for module in self.layers:
+            hidden_states = module(hidden_states, memory=memory, tgt_mask=causal_mask)
         
         # Step 5: 提取最后一层最后一个 token 作为预测基础
         last_hidden = hidden_states[:, -1, :]  # [B, D]

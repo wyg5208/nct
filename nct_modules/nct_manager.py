@@ -186,32 +186,80 @@ class NCTManager(nn.Module):
         prediction_error = prediction_results.get('total_free_energy', 0.5)
         
         # Step 5: Attention Global Workspace 选择意识内容
-        # integrated shape: [B, 1, D] -> squeeze to [D]
-        candidate_list = [integrated.squeeze(0)]  # List[[D]]
+        # 【多候选方案】构建多个候选表征进行竞争
+        # 从 embeddings 中提取各模态的独立特征向量
+        visual_candidate = self._embed_to_d(embeddings['visual_emb'])  # [D]
+        auditory_candidate = self._embed_to_d(embeddings['audio_emb'])  # [D]
+        intero_candidate = self._embed_to_d(embeddings['intero_emb'])  # [D]
+        integrated_candidate = integrated.squeeze(0)  # [1, D] → [D]
+        
+        # 构建候选列表（4 个候选：整合、视觉、听觉、内感受）
+        candidate_list = [
+            integrated_candidate,      # 主表征 [D]
+            visual_candidate,          # 视觉特征 [D]
+            auditory_candidate,        # 听觉特征 [D]
+            intero_candidate,          # 内感受特征 [D]
+        ]
+        
         winner_state, workspace_info = self.attention_workspace(
             candidates=candidate_list,
             neuromodulator_state=neurotransmitter_state,
         )
         
         # Step 6: 计算意识度量
-        if winner_state is not None and winner_state.attention_maps is not None:
-            # 使用 integrated 作为 neural_activity 来估计Φ
-            metrics = self.consciousness_metrics(
-                attention_maps=winner_state.attention_maps,
-                neural_activity=integrated.unsqueeze(0),  # [B=1, L=1, D]
-                prediction_error=prediction_error,
-                neurotransmitter_state=neurotransmitter_state,
-            )
+        # 【关键修复】无论是否有 winner，都要计算 metrics
+        # 使用 workspace_info 中的 attention_weights
+        if 'attention_weights' in workspace_info:
+            # 将 attention_weights [N_candidates] 转为 attention_maps [B, H, 1, N]
+            attn_weights = workspace_info['attention_weights']  # [N]
+            if isinstance(attn_weights, np.ndarray):
+                # 转为 tensor 并扩展到多头
+                attn_tensor = torch.from_numpy(attn_weights).float().unsqueeze(0).unsqueeze(0)  # [1, 1, 1, N]
+                attn_tensor = attn_tensor.repeat(1, self.config.n_heads, 1, 1)  # [1, H, 1, N]
+                
+                # 构建 neural_activity（需要至少 2 个时间步）
+                if len(self.sensory_history) >= 2:
+                    neural_activity = torch.stack(list(self.sensory_history), dim=1)  # [1, T, D]
+                else:
+                    # 历史不足时使用当前 integrated
+                    neural_activity = integrated.unsqueeze(1)  # [1, L=1, D]
+                
+                metrics = self.consciousness_metrics(
+                    attention_maps=attn_tensor,
+                    neural_activity=neural_activity,
+                    prediction_error=prediction_error,
+                    neurotransmitter_state=neurotransmitter_state,
+                )
+            else:
+                metrics = {'overall_score': 0.0, 'consciousness_level': 'unconscious', 'phi_value': 0.0}
         else:
-            metrics = {'overall_score': 0.0, 'consciousness_level': 'unconscious'}
+            metrics = {'overall_score': 0.0, 'consciousness_level': 'unconscious', 'phi_value': 0.0}
         
         # Step 7: γ同步
         gamma_info = self.gamma_synchronizer.get_current_phase(current_time)
         
         # Step 8: 构建意识状态
+        # 【修复】即使 winner_state 为 None，也要从 workspace_info 提取 salience
+        workspace_content = None
+        if winner_state is not None:
+            workspace_content = winner_state.to_conscious_content()
+        elif 'winner_salience' in workspace_info:
+            # 从 workspace_info 创建简化的 ConsciousContent
+            from .nct_core import NCTConsciousContent
+            workspace_content = NCTConsciousContent(
+                content_id=f"t_{current_time}",
+                representation=integrated.squeeze(0).detach().cpu().numpy(),
+                salience=workspace_info.get('winner_salience', 0),
+                gamma_phase=workspace_info.get('gamma_phase', 0),
+                timestamp=current_time,
+                attention_maps=None,
+                phi_value=metrics.get('phi_value', 0),
+                awareness_level=metrics.get('consciousness_level', 'unconscious'),
+            )
+        
         state = NCTConsciousnessState(
-            workspace_content=winner_state.to_conscious_content() if winner_state else None,
-            self_representation=self._infer_self_representation(prediction_error),  # 使用 prediction_error
+            workspace_content=workspace_content,
+            self_representation=self._infer_self_representation(prediction_error),
             neurotransmitter_state=neurotransmitter_state or {},
             consciousness_metrics=metrics,
             timestamp=current_time,
@@ -249,6 +297,39 @@ class NCTManager(nn.Module):
             'free_energy': free_energy,
             'identity_narrative': f"NCT 自我模型 @ cycle {self.total_cycles}",
         }
+    
+    def _embed_to_d(self, emb: torch.Tensor) -> torch.Tensor:
+        """将高维 embedding 投影到 [D] 维度
+        
+        Args:
+            emb: 输入 embedding [B, N, D] 或 [B, D]
+        
+        Returns:
+            投影后的向量 [D]
+        
+        使用平均池化 + 线性投影：
+        1. 对序列维度 N 进行平均池化（如果 N > 1）
+        2. 如果维度不匹配，使用线性层投影
+        """
+        if emb.dim() == 3:
+            # [B, N, D] -> 平均池化到 [B, D]
+            emb_pooled = emb.mean(dim=1)  # 沿序列维度平均
+        elif emb.dim() == 2:
+            # [B, D] -> 直接使用
+            emb_pooled = emb
+        else:
+            raise ValueError(f"Unexpected embedding shape: {emb.shape}")
+        
+        # 已经是 [D] 维度（B=1 时 squeeze）
+        if emb_pooled.shape[-1] == self.config.d_model:
+            return emb_pooled.squeeze(0)  # [1, D] -> [D]
+        else:
+            # 需要投影（这个情况不应该发生，因为前面已经控制了）
+            # 添加一个可学习的投影层
+            if not hasattr(self, '_projection_layer'):
+                self._projection_layer = nn.Linear(emb_pooled.shape[-1], self.config.d_model)
+            projected = self._projection_layer(emb_pooled)
+            return projected.squeeze(0)
     
     def get_stats(self) -> Dict[str, Any]:
         """获取系统统计信息"""

@@ -258,6 +258,10 @@ class AttentionGlobalWorkspace(nn.Module):
                 'winner_salience': winner_salience,
                 'below_threshold': True,
                 'attention_weights': attn_weights_flat.detach().cpu().numpy(),
+                'all_candidates_salience': [
+                    float(attn_weights_flat[i].item()) 
+                    for i in range(N_candidates)
+                ],
             }
         
         # Step 8: γ同步绑定
