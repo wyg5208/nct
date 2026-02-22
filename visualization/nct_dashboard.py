@@ -1,17 +1,16 @@
-"""
-NCT 实时可视化仪表盘 - Streamlit Web Interface
+"""NCT Real-time Visualization Dashboard - Streamlit Web Interface
 NeuroConscious Transformer Real-time Dashboard
 
-功能:
-1. 实时监控 Φ值、自由能、注意力权重
-2. 交互式参数调整
-3. 实验数据可视化对比
-4. 与论文结果一键对比
+Features:
+1. Real-time monitoring of Φ value, Free Energy, Attention Weights
+2. Interactive parameter adjustment
+3. Experiment data visualization comparison
+4. One-click comparison with paper results
 
-运行方式:
+Usage:
     streamlit run nct_dashboard.py
     
-安装依赖:
+Dependencies:
     pip install streamlit plotly pandas
 """
 
@@ -72,18 +71,163 @@ def generate_continuous_sensory(cycle_idx, noise_level=0.1):
 from nct_modules.nct_metrics import PhiFromAttention
 
 # ============================================================================
-# Streamlit 页面配置
+# Internationalization (i18n) Support
+# ============================================================================
+
+TRANSLATIONS = {
+    'en': {
+        # Page config
+        'page_title': 'NCT Real-time Dashboard',
+        
+        # Sidebar
+        'param_config': '⚙️ Parameter Configuration',
+        'arch_params': '🏗️ Architecture Parameters',
+        'd_model': 'Model Dimension (d_model)',
+        'n_heads': 'Number of Attention Heads',
+        'n_layers': 'Number of Transformer Layers',
+        'gamma_freq': 'γ-wave Frequency (Hz)',
+        'exp_params': '🔬 Experiment Parameters',
+        'n_cycles': 'Number of Consciousness Cycles',
+        'noise_level': 'Input Noise Level',
+        'noise_help': 'Controls the random noise intensity of input signals (lower = smoother)',
+        'show_phi': 'Show Φ Value Calculation',
+        'show_fe': 'Show Free Energy',
+        'show_attention': 'Show Attention Heatmap',
+        'control_panel': '🎮 Control Panel',
+        'start_btn': '▶️ Start Running',
+        'stop_btn': '⏹️ Stop',
+        'reset_btn': '🔄 Reset',
+        'paper_comparison': '📊 Paper Reference',
+        'show_paper_ref': 'Show Paper Φ Reference (d=768)',
+        'lang_settings': '🌐 Language',
+        'lang_select': 'Select Language',
+        
+        # Main interface
+        'main_header': '🧠 NCT Real-time Visualization Dashboard',
+        'running_status': 'Running - Cycle {}/{}',
+        'complete_msg': '✅ Completed {} consciousness cycles!',
+        'stopped_msg': '⏹️ Stopped',
+        'reset_msg': '🔄 Reset complete',
+        'view_details': '📋 View Detailed Data',
+        'download_csv': '📥 Download CSV Data',
+        
+        # Charts
+        'metrics_chart_title': '📈 Dynamic Changes in Consciousness Metrics',
+        'cycle': 'Cycle',
+        'phi_value': 'Φ Value',
+        'free_energy': 'Free Energy',
+        'paper_phi_note': 'Paper Φ (d=768)',
+        'paper_fe_note': 'Paper FE Final',
+        
+        # Attention heatmap
+        'attention_title': '🎯 Multi-candidate Competition - Attention Weight Distribution',
+        'attention_subtitle': '4 candidates compete in global workspace, winner broadcasts conscious content',
+        'attention_title_sim': '🎯 Multi-candidate Competition - Attention Weight Distribution (Simulated Data)',
+        'candidate_content': 'Candidate Content',
+        'attention_weight': 'Attention Weight',
+        'winner': '🏆 Winner',
+        'integrated_repr': 'Integrated Repr',
+        'visual_feature': 'Visual Feature',
+        'auditory_feature': 'Auditory Feature',
+        'intero_feature': 'Interoceptive Feature',
+        
+        # Confidence gauge
+        'confidence': '🎯 Confidence',
+        
+        # Metrics
+        'salience': 'Salience',
+        
+        # Footer
+        'version': 'Version',
+        'paper': 'Paper',
+        'paper_status': 'arXiv:xxxx.xxxxx (Coming soon)',
+    },
+    'zh': {
+        # Page config
+        'page_title': 'NCT 实时仪表盘',
+        
+        # Sidebar
+        'param_config': '⚙️ 参数配置',
+        'arch_params': '🏗️ 架构参数',
+        'd_model': '模型维度 (d_model)',
+        'n_heads': '注意力头数',
+        'n_layers': 'Transformer 层数',
+        'gamma_freq': 'γ波频率 (Hz)',
+        'exp_params': '🔬 实验参数',
+        'n_cycles': '意识周期数',
+        'noise_level': '输入噪声水平',
+        'noise_help': '控制输入信号的随机噪声强度（越小越平滑）',
+        'show_phi': '显示 Φ值计算',
+        'show_fe': '显示自由能',
+        'show_attention': '显示注意力热力图',
+        'control_panel': '🎮 控制面板',
+        'start_btn': '▶️ 开始运行',
+        'stop_btn': '⏹️ 停止',
+        'reset_btn': '🔄 重置',
+        'paper_comparison': '📊 论文参考',
+        'show_paper_ref': '显示论文 Φ 参考值 (d=768)',
+        'lang_settings': '🌐 语言',
+        'lang_select': '选择语言',
+        
+        # Main interface
+        'main_header': '🧠 NCT 实时可视化仪表盘',
+        'running_status': '运行中 - 周期 {}/{}',
+        'complete_msg': '✅ 完成 {} 个意识周期！',
+        'stopped_msg': '⏹️ 已停止运行',
+        'reset_msg': '🔄 已重置',
+        'view_details': '📋 查看详细数据',
+        'download_csv': '📥 下载 CSV 数据',
+        
+        # Charts
+        'metrics_chart_title': '📈 意识指标动态变化',
+        'cycle': '周期',
+        'phi_value': 'Φ值',
+        'free_energy': '自由能',
+        'paper_phi_note': '论文Φ值 (d=768)',
+        'paper_fe_note': '论文 FE 终值',
+        
+        # Attention heatmap
+        'attention_title': '🎯 多候选竞争 - 注意力权重分布',
+        'attention_subtitle': '4 个候选在全局工作空间中竞争，胜者获得意识内容广播权',
+        'attention_title_sim': '🎯 多候选竞争 - 注意力权重分布（模拟数据）',
+        'candidate_content': '候选内容',
+        'attention_weight': '注意力权重',
+        'winner': '🏆 获胜者',
+        'integrated_repr': '整合表征',
+        'visual_feature': '视觉特征',
+        'auditory_feature': '听觉特征',
+        'intero_feature': '内感受特征',
+        
+        # Confidence gauge
+        'confidence': '🎯 自信度',
+        
+        # Metrics
+        'salience': '显著性',
+        
+        # Footer
+        'version': '版本',
+        'paper': '论文',
+        'paper_status': 'arXiv:xxxx.xxxxx (即将提交)',
+    }
+}
+
+def get_text(key, lang='en'):
+    """Get translated text by key and language"""
+    return TRANSLATIONS.get(lang, TRANSLATIONS['en']).get(key, key)
+
+# ============================================================================
+# Streamlit Page Configuration
 # ============================================================================
 import streamlit as st
 
 st.set_page_config(
-    page_title="NCT 实时仪表盘",
+    page_title="NCT Real-time Dashboard",
     page_icon="🧠",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# 自定义 CSS 样式
+# Custom CSS styles
 st.markdown("""
 <style>
 .main-header {
@@ -104,46 +248,63 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ============================================================================
-# 侧边栏 - 参数配置
+# Language Selection (at the top of sidebar)
 # ============================================================================
-st.sidebar.title("⚙️ 参数配置")
+if 'language' not in st.session_state:
+    st.session_state.language = 'en'  # Default to English
 
-# 模型架构参数
-st.sidebar.subheader("🏗️ 架构参数")
-d_model = st.sidebar.slider("模型维度 (d_model)", 64, 768, 256, step=64)
-n_heads = st.sidebar.slider("注意力头数", 4, 16, 8)
-n_layers = st.sidebar.slider("Transformer 层数", 2, 8, 4)
-gamma_freq = st.sidebar.slider("γ波频率 (Hz)", 30.0, 50.0, 40.0, step=5.0)
+st.sidebar.subheader(get_text('lang_settings', st.session_state.language))
+lang_options = {'English': 'en', '中文': 'zh'}
+lang_display = {v: k for k, v in lang_options.items()}
+selected_lang_display = st.sidebar.selectbox(
+    get_text('lang_select', st.session_state.language),
+    options=list(lang_options.keys()),
+    index=0 if st.session_state.language == 'en' else 1
+)
+st.session_state.language = lang_options[selected_lang_display]
+lang = st.session_state.language
 
-# 实验参数
-st.sidebar.subheader("🔬 实验参数")
-n_cycles = st.sidebar.slider("意识周期数", 5, 100, 20)
+# ============================================================================
+# Sidebar - Parameter Configuration
+# ============================================================================
+st.sidebar.title(get_text('param_config', lang))
+
+# Model architecture parameters
+st.sidebar.subheader(get_text('arch_params', lang))
+d_model = st.sidebar.slider(get_text('d_model', lang), 64, 768, 256, step=64)
+n_heads = st.sidebar.slider(get_text('n_heads', lang), 4, 16, 8)
+n_layers = st.sidebar.slider(get_text('n_layers', lang), 2, 8, 4)
+gamma_freq = st.sidebar.slider(get_text('gamma_freq', lang), 30.0, 50.0, 40.0, step=5.0)
+
+# Experiment parameters
+st.sidebar.subheader(get_text('exp_params', lang))
+n_cycles = st.sidebar.slider(get_text('n_cycles', lang), 5, 100, 20)
 noise_level = st.sidebar.slider(
-    "输入噪声水平",
+    get_text('noise_level', lang),
     min_value=0.0,
     max_value=0.5,
     value=0.15,
     step=0.05,
-    help="控制输入信号的随机噪声强度（越小越平滑）"
+    help=get_text('noise_help', lang)
 )
-show_phi = st.sidebar.checkbox("显示 Φ值计算", value=True)
-show_fe = st.sidebar.checkbox("显示自由能", value=True)
-show_attention = st.sidebar.checkbox("显示注意力热力图", value=True)
+show_phi = st.sidebar.checkbox(get_text('show_phi', lang), value=True)
+show_fe = st.sidebar.checkbox(get_text('show_fe', lang), value=True)
+show_attention = st.sidebar.checkbox(get_text('show_attention', lang), value=True)
 
-# 控制按钮
-st.sidebar.subheader("🎮 控制面板")
-start_btn = st.sidebar.button("▶️ 开始运行", type="primary")
-stop_btn = st.sidebar.button("⏹️ 停止", type="secondary")
-reset_btn = st.sidebar.button("🔄 重置", type="secondary")
+# Control buttons
+st.sidebar.subheader(get_text('control_panel', lang))
+start_btn = st.sidebar.button(get_text('start_btn', lang), type="primary")
+stop_btn = st.sidebar.button(get_text('stop_btn', lang), type="secondary")
+reset_btn = st.sidebar.button(get_text('reset_btn', lang), type="secondary")
 
-# 论文数据对比
-st.sidebar.subheader("📊 论文数据对比")
-show_paper_comparison = st.sidebar.checkbox("显示论文参考值", value=False)
+# Paper data comparison
+st.sidebar.subheader(get_text('paper_comparison', lang))
+show_paper_comparison = st.sidebar.checkbox(get_text('show_paper_ref', lang), value=False)
 
 # ============================================================================
-# 主界面
+# Main Interface
 # ============================================================================
-st.markdown('<p class="main-header">🧠 NCT 实时可视化仪表盘</p>', unsafe_allow_html=True)
+st.markdown(f'<p class="main-header">{get_text("main_header", lang)}</p>', unsafe_allow_html=True)
 st.markdown("---")
 
 # 初始化状态
@@ -212,42 +373,43 @@ def run_cycle(manager, cycle_idx):
     return result
 
 
-def plot_metrics_chart(results_df, show_paper=False):
-    """绘制指标趋势图"""
+def plot_metrics_chart(results_df, show_paper=False, lang='en'):
+    """Plot metrics trend chart"""
     fig = go.Figure()
     
-    # Φ值曲线
+    # Φ value curve
     fig.add_trace(go.Scatter(
         x=results_df['cycle'],
         y=results_df['phi_value'],
         mode='lines+markers',
-        name='Φ值',
+        name=get_text('phi_value', lang),
         line=dict(color='#FF6B6B', width=3),
         marker=dict(size=8, symbol='circle'),
     ))
     
-    # 自由能曲线（双 Y 轴）
+    # Free energy curve (dual Y axis)
     fig.add_trace(go.Scatter(
         x=results_df['cycle'],
         y=results_df['free_energy'],
         mode='lines+markers',
-        name='自由能',
+        name=get_text('free_energy', lang),
         line=dict(color='#4ECDC4', width=3, dash='dot'),
         yaxis='y2',
     ))
     
-    # 论文参考值（如果启用）
+    # Paper reference values (if enabled)
     if show_paper:
+        # Φ value reference line (primary Y axis) - Paper: d=768, structured attention
         fig.add_hline(y=0.329, line_dash="dash", line_color="green", 
-                     annotation_text="论文Φ值 (d=768)", annotation_position="top right")
-        fig.add_hline(y=0.57, line_dash="dash", line_color="orange",
-                     annotation_text="论文 FE 终值", annotation_position="bottom right")
+                     annotation_text=get_text('paper_phi_note', lang), annotation_position="top right")
+        # Note: Free energy reference (0.57) is from PredictiveHierarchy after 100-step optimization,
+        # which is different from the instant prediction error shown here. Reference line removed.
     
     fig.update_layout(
-        title='📈 意识指标动态变化',
-        xaxis_title='周期',
-        yaxis_title='Φ值',
-        yaxis2=dict(title='自由能', overlaying='y', side='right'),
+        title=get_text('metrics_chart_title', lang),
+        xaxis_title=get_text('cycle', lang),
+        yaxis_title=get_text('phi_value', lang),
+        yaxis2=dict(title=get_text('free_energy', lang), overlaying='y', side='right'),
         legend=dict(x=0, y=1.1, orientation='h'),
         height=400,
         hovermode='x unified'
@@ -256,25 +418,33 @@ def plot_metrics_chart(results_df, show_paper=False):
     return fig
 
 
-def plot_attention_heatmap(manager):
-    """绘制注意力权重分布图（多候选竞争版本）"""
-    # 从 session_state 中获取真实的注意力权重
+def plot_attention_heatmap(manager, lang='en'):
+    """Plot attention weight distribution (multi-candidate competition version)"""
+    # Get candidate names based on language
+    candidate_names = [
+        get_text('integrated_repr', lang),
+        get_text('visual_feature', lang),
+        get_text('auditory_feature', lang),
+        get_text('intero_feature', lang)
+    ]
+    
+    # Get real attention weights from session_state
     if hasattr(st.session_state, 'last_attention_maps') and st.session_state.last_attention_maps is not None:
         attention_maps = st.session_state.last_attention_maps
-        print(f"✅ 使用真实注意力数据，shape: {attention_maps.shape}")
+        print(f"✅ Using real attention data, shape: {attention_maps.shape}")
         
-        # 获取所有候选的显著性（如果有 workspace_info）
+        # Get all candidates' salience (if workspace_info exists)
         all_salience = []
         if hasattr(st.session_state, 'last_workspace_info'):
             all_salience = st.session_state.last_workspace_info.get('all_candidates_salience', [])
         
         n_candidates = len(all_salience) if all_salience else attention_maps.shape[3]
-        candidate_names = ['整合表征', '视觉特征', '听觉特征', '内感受特征'][:n_candidates]
+        candidate_names = candidate_names[:n_candidates]
         
-        # 绘制条形图：展示每个候选的注意力权重
+        # Draw bar chart: show attention weight for each candidate
         fig = go.Figure()
         
-        # 使用所有头的平均注意力权重
+        # Use average attention weight across all heads
         avg_attention = attention_maps[0, :, 0, :].mean(dim=0).cpu().numpy()  # [N_candidates]
         
         fig.add_trace(go.Bar(
@@ -285,23 +455,23 @@ def plot_attention_heatmap(manager):
             textposition='auto'
         ))
         
-        # 标记获胜者
+        # Mark the winner
         if hasattr(st.session_state, 'last_workspace_info'):
             winner_idx = st.session_state.last_workspace_info.get('winner_idx', -1)
             if 0 <= winner_idx < n_candidates:
-                # 在获胜者上方添加标记
+                # Add marker above the winner
                 fig.add_annotation(
                     x=candidate_names[winner_idx],
                     y=max(avg_attention) * 1.1,
-                    text='🏆 获胜者',
+                    text=get_text('winner', lang),
                     showarrow=False,
                     font=dict(size=16, color='#FFD700')
                 )
         
         fig.update_layout(
-            title='🎯 多候选竞争 - 注意力权重分布\n<span style="font-size:12px;color:#666">4 个候选在全局工作空间中竞争，胜者获得意识内容广播权</span>',
-            xaxis_title='候选内容',
-            yaxis_title='注意力权重',
+            title=f'{get_text("attention_title", lang)}<br><span style="font-size:12px;color:#666">{get_text("attention_subtitle", lang)}</span>',
+            xaxis_title=get_text('candidate_content', lang),
+            yaxis_title=get_text('attention_weight', lang),
             height=450,
             showlegend=False,
             yaxis=dict(range=[0, max(0.5, max(avg_attention) * 1.3)])
@@ -310,13 +480,12 @@ def plot_attention_heatmap(manager):
         return fig
         
     else:
-        # 如果没有真实数据，生成模拟数据
+        # If no real data, generate simulated data
         n_candidates = 4
-        candidate_names = ['整合表征', '视觉特征', '听觉特征', '内感受特征']
-        # 模拟稀疏注意力
+        # Simulate sparse attention
         np.random.seed(42)
         avg_attention = np.random.rand(n_candidates) * 0.3 + 0.2
-        avg_attention[0] += 0.2  # 让整合表征略高
+        avg_attention[0] += 0.2  # Make integrated representation slightly higher
         
         fig = go.Figure()
         fig.add_trace(go.Bar(
@@ -328,9 +497,9 @@ def plot_attention_heatmap(manager):
         ))
         
         fig.update_layout(
-            title='🎯 多候选竞争 - 注意力权重分布（模拟数据）',
-            xaxis_title='候选内容',
-            yaxis_title='注意力权重',
+            title=get_text('attention_title_sim', lang),
+            xaxis_title=get_text('candidate_content', lang),
+            yaxis_title=get_text('attention_weight', lang),
             height=450,
             showlegend=False,
             yaxis=dict(range=[0, max(0.5, max(avg_attention) * 1.3)])
@@ -339,13 +508,13 @@ def plot_attention_heatmap(manager):
         return fig
 
 
-def plot_confidence_gauge(confidence):
-    """绘制自信度仪表盘"""
+def plot_confidence_gauge(confidence, lang='en'):
+    """Plot confidence gauge"""
     fig = go.Figure(go.Indicator(
         mode="gauge+number+delta",
         value=confidence,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "🎯 自信度", 'font': {'size': 24}},
+        title={'text': get_text('confidence', lang), 'font': {'size': 24}},
         delta={'reference': 0.5, 'increasing': None, 'decreasing': None},
         gauge={
             'axis': {'range': [None, 1]},
@@ -371,24 +540,24 @@ if start_btn and not st.session_state.running:
     st.session_state.results_history = []
     st.session_state.cycle_count = 0
     
-    # 创建管理器
+    # Create manager
     manager = create_nct_manager()
     manager.start()
     
     progress_bar = st.progress(0)
     status_text = st.empty()
     
-    # 运行指定周期数
+    # Run specified number of cycles
     for cycle in range(n_cycles):
         result = run_cycle(manager, cycle + 1)
         st.session_state.results_history.append(result)
         st.session_state.cycle_count += 1
         
-        # 更新进度
+        # Update progress
         progress_bar.progress((cycle + 1) / n_cycles)
-        status_text.text(f"运行中 - 周期 {cycle + 1}/{n_cycles}")
+        status_text.text(get_text('running_status', lang).format(cycle + 1, n_cycles))
         
-        # 实时更新图表（每 5 个周期）
+        # Real-time chart update (every 5 cycles)
         if (cycle + 1) % 5 == 0 or cycle == 0:
             results_df = pd.DataFrame(st.session_state.results_history)
             
@@ -396,38 +565,38 @@ if start_btn and not st.session_state.running:
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.plotly_chart(plot_metrics_chart(results_df, show_paper_comparison), width="stretch", key=f"metrics_chart_{cycle}")
+                    st.plotly_chart(plot_metrics_chart(results_df, show_paper_comparison, lang), width="stretch", key=f"metrics_chart_{cycle}")
                 
                 with col2:
                     if show_attention:
-                        st.plotly_chart(plot_attention_heatmap(manager), width="stretch", key=f"attention_heatmap_{cycle}")
+                        st.plotly_chart(plot_attention_heatmap(manager, lang), width="stretch", key=f"attention_heatmap_{cycle}")
                     else:
-                        st.plotly_chart(plot_confidence_gauge(result['confidence']), width="stretch", key=f"confidence_gauge_{cycle}")
+                        st.plotly_chart(plot_confidence_gauge(result['confidence'], lang), width="stretch", key=f"confidence_gauge_{cycle}")
             
-            # 更新指标卡片
+            # Update metric cards
             with metrics_placeholder.container():
                 col1, col2, col3, col4 = st.columns(4)
                 
                 latest = results_df.iloc[-1]
-                col1.metric("Φ值", f"{latest['phi_value']:.3f}", delta=None)
-                col2.metric("自由能", f"{latest['free_energy']:.4f}", delta=f"{latest['free_energy'] - results_df.iloc[0]['free_energy']:.4f}")
-                col3.metric("自信度", f"{latest['confidence']:.3f}")
-                col4.metric("显著性", f"{latest['salience']:.3f}")
+                col1.metric(get_text('phi_value', lang), f"{latest['phi_value']:.3f}", delta=None)
+                col2.metric(get_text('free_energy', lang), f"{latest['free_energy']:.4f}", delta=f"{latest['free_energy'] - results_df.iloc[0]['free_energy']:.4f}")
+                col3.metric(get_text('confidence', lang).replace('🎯 ', ''), f"{latest['confidence']:.3f}")
+                col4.metric(get_text('salience', lang), f"{latest['salience']:.3f}")
     
     manager.stop()
     progress_bar.empty()
     status_text.empty()
     
-    st.success(f"✅ 完成 {n_cycles} 个意识周期！")
+    st.success(get_text('complete_msg', lang).format(n_cycles))
     
-    # 显示最终数据表格
-    with st.expander("📋 查看详细数据"):
+    # Show final data table
+    with st.expander(get_text('view_details', lang)):
         st.dataframe(pd.DataFrame(st.session_state.results_history))
     
-    # 导出按钮
+    # Export button
     csv = pd.DataFrame(st.session_state.results_history).to_csv(index=False)
     st.download_button(
-        label="📥 下载 CSV 数据",
+        label=get_text('download_csv', lang),
         data=csv,
         file_name=f'nct_results_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv',
         mime='text/csv'
@@ -435,7 +604,7 @@ if start_btn and not st.session_state.running:
 
 elif stop_btn:
     st.session_state.running = False
-    st.warning("⏹️ 已停止运行")
+    st.warning(get_text('stopped_msg', lang))
 
 elif reset_btn:
     st.session_state.running = False
@@ -444,16 +613,45 @@ elif reset_btn:
     metrics_placeholder.empty()
     charts_placeholder.empty()
     log_placeholder.empty()
-    st.info("🔄 已重置")
+    st.info(get_text('reset_msg', lang))
 
 # ============================================================================
-# 页脚信息
+# Display existing data (when not running but has history)
+# ============================================================================
+if not st.session_state.running and st.session_state.results_history:
+    results_df = pd.DataFrame(st.session_state.results_history)
+    
+    with charts_placeholder.container():
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.plotly_chart(plot_metrics_chart(results_df, show_paper_comparison, lang), use_container_width=True, key="metrics_chart_static")
+        
+        with col2:
+            if show_attention:
+                st.plotly_chart(plot_attention_heatmap(None, lang), use_container_width=True, key="attention_heatmap_static")
+            else:
+                latest = results_df.iloc[-1]
+                st.plotly_chart(plot_confidence_gauge(latest['confidence'], lang), use_container_width=True, key="confidence_gauge_static")
+    
+    # Update metric cards
+    with metrics_placeholder.container():
+        col1, col2, col3, col4 = st.columns(4)
+        
+        latest = results_df.iloc[-1]
+        col1.metric(get_text('phi_value', lang), f"{latest['phi_value']:.3f}", delta=None)
+        col2.metric(get_text('free_energy', lang), f"{latest['free_energy']:.4f}", delta=f"{latest['free_energy'] - results_df.iloc[0]['free_energy']:.4f}")
+        col3.metric(get_text('confidence', lang).replace('🎯 ', ''), f"{latest['confidence']:.3f}")
+        col4.metric(get_text('salience', lang), f"{latest['salience']:.3f}")
+
+# ============================================================================
+# Footer Information
 # ============================================================================
 st.markdown("---")
 col1, col2, col3 = st.columns(3)
 with col1:
     st.write("**GitHub:** https://github.com/wyg5208/nct")
 with col2:
-    st.write("**版本:** v3.1.0")
+    st.write(f"**{get_text('version', lang)}:** v3.1.0")
 with col3:
-    st.write("**论文:** arXiv:xxxx.xxxxx (即将提交)")
+    st.write(f"**{get_text('paper', lang)}:** {get_text('paper_status', lang)}")
