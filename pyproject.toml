@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neuroconscious-transformer"
+version = "3.0.0-alpha"
+authors = [
+    {name = "WinClaw Research Team", email = "winclaw@example.com"},
+]
+description = "NeuroConscious Transformer: Next-Generation Neuromorphic Consciousness Architecture"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+keywords = [
+    "consciousness",
+    "neuroscience",
+    "transformer",
+    "attention mechanism",
+    "predictive coding",
+    "STDP",
+    "brain-inspired computing",
+]
+
+dependencies = [
+    "torch>=2.0.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.0.0",
+]
+visualization = [
+    "matplotlib>=3.7.0",
+    "seaborn>=0.12.0",
+]
+dashboard = [
+    "PySide6>=6.5.0",
+    "pyqtgraph>=0.13.0",
+]
+notebook = [
+    "jupyter>=1.0.0",
+    "ipywidgets>=8.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/winclaw/NCT"
+Documentation = "https://github.com/winclaw/NCT/docs"
+Repository = "https://github.com/winclaw/NCT.git"
+Issues = "https://github.com/winclaw/NCT/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["NCT*", "nct_*"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311', 'py312']
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "W", "I", "N", "UP"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false

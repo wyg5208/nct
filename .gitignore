@@ -1,0 +1,90 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+
+# LaTeX compilation artifacts (for papers)
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.nav
+*.snm
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.thm
+*.tmp
+*.backup
+*_backup.*
+history_version/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Experiment results (large data files)
+experiments/results/*.json
+experiments/results/*.csv
+experiments/results/*.pkl
+
+# Temp files
+*.swp
+*.swo
+*~
+temp_*.txt
+*.log
+
+# Compiled PDFs (keep source .tex only)
+*.pdf
+
+# Large model checkpoints
+checkpoints/
+*.pt
+*.pth
+*.bin
