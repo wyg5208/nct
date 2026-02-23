@@ -296,13 +296,14 @@ for trial in range(100):
 
 ## 📚 参考文献
 
-1. Millidge, Tschantz & Buckley (2022). Predictive coding approximates backprop along arbitrary computation graphs. *Neural Computation*
-2. Vaswani et al. (2017). Attention Is All You Need
-3. Dehaene & Changeux (2011). Experimental and theoretical approaches to conscious processing
-4. Friston (2010). The free-energy principle: a unified brain theory
-5. Tononi (2008). Consciousness as integrated information
-6. Bi & Poo (1998). Synaptic modifications by STDP
-7. Fries (2005). Gamma oscillations and communication
+1. Whittington & Bogacz (2017). An approximation of the error backpropagation algorithm in a predictive coding network with local Hebbian synaptic plasticity. *Neural Computation*
+2. Millidge, Tschantz & Buckley (2022). Predictive coding approximates backprop along arbitrary computation graphs. *Neural Computation*
+3. Vaswani et al. (2017). Attention Is All You Need
+4. Dehaene & Changeux (2011). Experimental and theoretical approaches to conscious processing
+5. Friston (2010). The free-energy principle: a unified brain theory
+6. Tononi (2008). Consciousness as integrated information
+7. Bi & Poo (1998). Synaptic modifications by STDP
+8. Fries (2005). Gamma oscillations and communication
 
 ### 📄 相关论文
 
