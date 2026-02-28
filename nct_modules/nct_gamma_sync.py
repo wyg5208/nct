@@ -16,7 +16,7 @@ NeuroConscious Transformer - Gamma Synchronization Mechanism
 phase(t) = 2π · (t mod T) / T, where T = 1000/40 ms
 synchronized_update = update · cos(phase)
 
-作者：WinClaw Research Team
+作者：WENG YONGGANG(翁勇刚)
 创建：2026 年 2 月 21 日
 版本：v3.1.0
 """

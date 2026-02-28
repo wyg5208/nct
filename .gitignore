@@ -72,10 +72,14 @@ desktop.ini
 experiments/results/*.json
 experiments/results/*.csv
 experiments/results/*.pkl
+results/
+*.png
 
 #docs
+# 内部文档和论文源文件（不公开）
 /docs/
 /neuroconscious_paper/
+/neuroconscious-web/
 .qoder/
 
 # Temp files
@@ -88,8 +92,16 @@ temp_*.txt
 # Compiled PDFs (keep source .tex only)
 *.pdf
 
+# Dataset files (auto-download, do not commit)
+data/
+
 # Large model checkpoints
 checkpoints/
 *.pt
 *.pth
 *.bin
+
+# Archive files
+*.rar
+*.zip
+*.7z

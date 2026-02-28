@@ -24,7 +24,7 @@ NeuroConscious Transformer - Consciousness Metrics
 - 高Φ值 ↔ 强整合能力 ↔ 高意识水平
 - γ同步增强整合（相位锁定促进信息交换）
 
-作者：WinClaw Research Team
+作者：WENG YONGGANG(翁勇刚)
 创建：2026 年 2 月 21 日
 版本：v3.1.0
 """

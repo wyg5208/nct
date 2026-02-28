@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "neuroconscious-transformer"
-version = "3.1.0"
+version = "3.1.1"
 authors = [
-    {name = "WinClaw Research Team", email = "winclaw@example.com"},
+    {name = "WENG YONGGANG", email = "wyg5208@126.com"},
 ]
 description = "NeuroConscious Transformer: Next-Generation Neuromorphic Consciousness Architecture"
 readme = "README.md"

@@ -16,7 +16,7 @@ NeuroConscious Transformer Test Suite
 运行方式：
     python -m pytest test_complete.py -v
 
-作者：WinClaw Research Team
+作者：WENG YONGGANG(翁勇刚)
 创建：2026 年 2 月 21 日
 """
 

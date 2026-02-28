@@ -2,7 +2,7 @@
 NeuroConscious Transformer (NCT) - 神经形态意识 Transformer 架构
 
 版本：v3.1.0
-作者：WinClaw Research Team
+作者：WENG YONGGANG(翁勇刚)
 创建：2026 年 2 月 21 日
 
 核心理论创新：
@@ -18,7 +18,7 @@ NeuroConscious Transformer (NCT) - 神经形态意识 Transformer 架构
 """
 
 __version__ = "3.1.0"
-__author__ = "WinClaw Research Team"
+__author__ = "WENG YONGGANG(翁勇刚)"
 
 # 核心模块导出
 from nct_modules import (

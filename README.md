@@ -3,7 +3,7 @@
 **Version**: v3.1.0  
 **Created**: February 21, 2026  
 **Updated**: February 22, 2026  
-**Author**: WinClaw Research Team  
+**Author**: WENG YONGGANG(翁勇刚)  
 **Paper**: [arXiv:xxxx.xxxxx](https://arxiv.org/) (Forthcoming)  
 **Code**: https://github.com/wyg5208/nct  
 

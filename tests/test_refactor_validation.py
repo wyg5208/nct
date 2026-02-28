@@ -7,7 +7,7 @@ NCT 架构重构验证实验
 3. Φ值（整合信息量）计算正确性
 4. 性能基准测试
 
-作者：WinClaw Research Team
+作者：WENG YONGGANG(翁勇刚)
 创建：2026 年 2 月 21 日
 """
 
