@@ -5,6 +5,7 @@ include requirements.txt
 include pyproject.toml
 recursive-include examples *.py
 recursive-include tests *.py
+recursive-include visualization *.py
 recursive-exclude * __pycache__
 recursive-exclude * *.pyc
 recursive-exclude * *.pyo

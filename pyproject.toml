@@ -51,8 +51,9 @@ vision = [
     "torchvision>=0.15.0",
 ]
 dashboard = [
-    "PySide6>=6.5.0",
-    "pyqtgraph>=0.13.0",
+    "streamlit>=1.30.0",
+    "plotly>=5.18.0",
+    "pandas>=2.0.0",
 ]
 notebook = [
     "jupyter>=1.0.0",
@@ -64,6 +65,9 @@ Homepage = "https://github.com/winclaw/NCT"
 Documentation = "https://github.com/winclaw/NCT/docs"
 Repository = "https://github.com/winclaw/NCT.git"
 Issues = "https://github.com/winclaw/NCT/issues"
+
+[project.scripts]
+nct-dashboard = "nct_modules.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
