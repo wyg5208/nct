@@ -1,8 +1,8 @@
 # 🧠 NeuroConscious Transformer (NCT)
 
-**Version**: v3.1.0  
+**Version**: v3.1.1  
 **Created**: February 21, 2026  
-**Updated**: February 22, 2026  
+**Updated**: February 28, 2026  
 **Author**: WENG YONGGANG(翁勇刚)  
 **Paper**: [arXiv:xxxx.xxxxx](https://arxiv.org/) (Forthcoming)  
 **Code**: https://github.com/wyg5208/nct  
