@@ -26,7 +26,7 @@ NeuroConscious Transformer: Complete Implementation Roadmap
 
 作者：WinClaw Research Team
 创建：2026 年 2 月 21 日
-版本：v3.0.0-alpha (NeuroConscious Transformer)
+版本：v3.1.0 (NeuroConscious Transformer)
 """
 
 # 这是一个索引文件，实际实现在各个子模块中
@@ -83,7 +83,7 @@ from .nct_manager import (
     NCTConsciousnessState,
 )
 
-__version__ = "3.0.0-alpha"
+__version__ = "3.1.0"
 __all__ = [
     # 核心配置
     'NCTConfig',

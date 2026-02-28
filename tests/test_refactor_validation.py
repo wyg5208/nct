@@ -19,9 +19,6 @@ from typing import Dict, Any, List
 import numpy as np
 import torch
 
-# 添加路径
-sys.path.insert(0, '.')
-
 from nct_modules import (
     TransformerSTDP,
     STDPEvent,

@@ -17,7 +17,7 @@ sensory_data → MultiModalEncoder → CrossModalIntegration
 
 作者：WinClaw Research Team
 创建：2026 年 2 月 21 日
-版本：v3.0.0-alpha
+版本：v3.1.0
 """
 
 from __future__ import annotations
@@ -188,21 +188,30 @@ class NCTManager(nn.Module):
         # Step 5: Attention Global Workspace 选择意识内容
         # 【多候选方案】构建多个候选表征进行竞争
         # 从 embeddings 中提取各模态的独立特征向量
-        visual_candidate = self._embed_to_d(embeddings['visual_emb'])  # [D]
-        auditory_candidate = self._embed_to_d(embeddings['audio_emb'])  # [D]
-        intero_candidate = self._embed_to_d(embeddings['intero_emb'])  # [D]
+        candidates = []
+        
+        # 整合表征（必须有）
         integrated_candidate = integrated.squeeze(0)  # [1, D] → [D]
+        candidates.append(integrated_candidate)
         
-        # 构建候选列表（4 个候选：整合、视觉、听觉、内感受）
-        candidate_list = [
-            integrated_candidate,      # 主表征 [D]
-            visual_candidate,          # 视觉特征 [D]
-            auditory_candidate,        # 听觉特征 [D]
-            intero_candidate,          # 内感受特征 [D]
-        ]
+        # 视觉表征（如果有）
+        if 'visual_emb' in embeddings:
+            visual_candidate = self._embed_to_d(embeddings['visual_emb'])  # [D]
+            candidates.append(visual_candidate)
         
+        # 听觉表征（如果有）
+        if 'audio_emb' in embeddings:
+            auditory_candidate = self._embed_to_d(embeddings['audio_emb'])  # [D]
+            candidates.append(auditory_candidate)
+        
+        # 内感受表征（如果有）
+        if 'intero_emb' in embeddings:
+            intero_candidate = self._embed_to_d(embeddings['intero_emb'])  # [D]
+            candidates.append(intero_candidate)
+        
+        # 调用工作空间
         winner_state, workspace_info = self.attention_workspace(
-            candidates=candidate_list,
+            candidates=candidates,
             neuromodulator_state=neurotransmitter_state,
         )
         

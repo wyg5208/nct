@@ -18,7 +18,7 @@ synchronized_update = update · cos(phase)
 
 作者：WinClaw Research Team
 创建：2026 年 2 月 21 日
-版本：v3.0.0-alpha
+版本：v3.1.0
 """
 
 from __future__ import annotations

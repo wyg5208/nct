@@ -7,10 +7,6 @@
 3. 可视化展示竞争结果
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
 import numpy as np
 import torch
 from nct_modules import NCTManager, NCTConfig

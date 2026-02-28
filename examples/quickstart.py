@@ -1,5 +1,5 @@
 """
-NCT v3.0 快速开始示例
+NCT v3.1 快速开始示例
 NeuroConscious Transformer Quickstart
 
 运行方式：
@@ -11,19 +11,13 @@ NeuroConscious Transformer Quickstart
 3. 显示意识状态指标
 """
 
-import sys
-import os
-
-# 添加 NCT 模块到路径（向上一级）
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from nct_modules import NCTManager, NCTConfig
 import numpy as np
 
 
 def main():
     print("=" * 70)
-    print("NeuroConscious Transformer v3.0 - 快速开始")
+    print("NeuroConscious Transformer v3.1 - 快速开始")
     print("=" * 70)
     
     # 1. 创建配置

@@ -34,7 +34,7 @@ NeuroConscious Transformer: Next-Generation Neuromorphic Consciousness Architect
 
 作者：WinClaw Research Team
 创建：2026 年 2 月 21 日
-版本：v3.0.0-alpha (NeuroConscious Transformer)
+版本：v3.1.0 (NeuroConscious Transformer)
 """
 
 from __future__ import annotations
@@ -215,6 +215,17 @@ class MultiModalEncoder(nn.Module):
         # 听觉编码
         if 'auditory' in sensory_data:
             audio_input = sensory_data['auditory']
+            
+            # 维度转换：确保是 [B, F, T] 格式
+            if audio_input.dim() == 3:
+                # 如果已经是 3D，检查是否需要转置
+                if audio_input.shape[1] < audio_input.shape[2]:
+                    # [B, T, F] → [B, F, T]
+                    audio_input = audio_input.transpose(1, 2)
+            elif audio_input.dim() == 2:
+                # [T, F] → [1, F, T]
+                audio_input = audio_input.unsqueeze(0).transpose(1, 2)
+            
             audio_emb = self.audio_encoder(audio_input)
             audio_emb = self.modal_projection['audio'](audio_emb)
             embeddings['audio_emb'] = audio_emb

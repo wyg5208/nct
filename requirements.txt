@@ -3,6 +3,7 @@
 
 # deep learning framework
 torch>=2.0.0
+torchvision>=0.15.0
 
 # scientific computing
 numpy>=1.24.0
