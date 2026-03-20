@@ -1,5 +1,5 @@
 """
-NCT v3.0 基础功能测试套件
+NCT v3.1 基础功能测试套件
 
 运行方式：
     python test_basic.py
@@ -16,14 +16,9 @@ NCT v3.0 基础功能测试套件
 预期结果：所有测试通过 ✅
 """
 
-import sys
-import os
 import unittest
 import numpy as np
 import torch
-
-# 添加路径（向上一级）
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from nct_modules import (
     NCTManager, 

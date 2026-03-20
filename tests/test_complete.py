@@ -1,5 +1,5 @@
 """
-NCT v3.0 完整单元测试套件
+NCT v3.1 完整单元测试套件
 NeuroConscious Transformer Test Suite
 
 测试范围：
@@ -16,18 +16,13 @@ NeuroConscious Transformer Test Suite
 运行方式：
     python -m pytest test_complete.py -v
 
-作者：WinClaw Research Team
+作者：WENG YONGGANG(翁勇刚)
 创建：2026 年 2 月 21 日
 """
 
-import sys
-import os
 import unittest
 import numpy as np
 import torch
-
-# 添加路径（向上一级到 NCT 目录）
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from nct_modules import (
     NCTConfig,

@@ -4,10 +4,6 @@
 运行几个周期展示 Φ值和 salience 不再是 0
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
 import numpy as np
 from nct_modules import NCTManager, NCTConfig
 
