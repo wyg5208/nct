@@ -10,7 +10,7 @@
 **版本**: v3.2.0  
 **创建**: 2026 年 2 月 21 日  
 **更新日期**: 2026 年 3 月 20 日  
-**作者**: WENG YONGGANG(翁勇刚)  
+**作者**: NCT LAB Team  
 **官方网站**: [neuroconscious.link](https://neuroconscious.link)  
 **代码**: https://github.com/wyg5208/nct  
 

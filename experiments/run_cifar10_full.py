@@ -18,8 +18,7 @@ Phase 3: Complete CIFAR-10 Transfer Learning with NCT
     # 跳过训练直接测试已有模型
     python experiments/run_cifar10_full.py --skip_training --test_model results/cifar10/best_model.pt
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 24, 2026
 """
 

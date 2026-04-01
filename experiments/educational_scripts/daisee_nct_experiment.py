@@ -14,7 +14,7 @@ DAiSEE 数据集：
 下载地址：https://people.iith.ac.in/vineethnb/resources/daisee/index.html
 数据放置：data/daisee/DataSet/ 和 data/daisee/Labels/
 
-作者：NeuroConscious Lab / WENG YONGGANG
+作者：NCT LAB Team
 日期：2026-03-15
 """
 

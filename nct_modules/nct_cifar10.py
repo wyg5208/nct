@@ -9,8 +9,7 @@ CIFAR-10 专用的 NCT 架构，适配 RGB 输入和 32x32 图像
 3. 数据增强集成
 4. 保持与 MNIST 版本相同的核心理论
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 24, 2026
 """
 

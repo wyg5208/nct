@@ -5,7 +5,7 @@ Phase 2B-Optimized: NCT Anomaly Detection - Enhanced Threshold Strategy
 
 修订日期：2026-02-27
 修订时间：自动记录
-修订人员：Weng Yonggang
+修订人员：NCT LAB Team
 
 核心优化策略：
 1. 【分类型 PE 阈值】针对噪声和其他异常设置不同的 PE 阈值
@@ -30,8 +30,7 @@ Phase 2B-Optimized: NCT Anomaly Detection - Enhanced Threshold Strategy
 - OOD F1: 0.38-0.42（原 0.303）
 - 旋转/遮挡 F1: 保持或略提升
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 27, 2026
 """
 

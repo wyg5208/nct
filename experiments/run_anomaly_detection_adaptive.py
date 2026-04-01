@@ -12,8 +12,7 @@ Phase 2E: NCT Anomaly Detection - Adaptive Weighted Fusion
 Revision Date: 2026-02-27
 Revision Time: 09:00:00
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 """
 
 import torch

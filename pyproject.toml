@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "neuroconscious-transformer"
 version = "3.2.0"
 authors = [
-    {name = "WENG YONGGANG", email = "wyg5208@126.com"},
+    {name = "NCT LAB Team"},
 ]
 description = "NeuroConscious Transformer: Next-Generation Neuromorphic Consciousness Architecture"
 readme = { file = "README_PYPI.md", content-type = "text/markdown" }

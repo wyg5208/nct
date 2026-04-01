@@ -5,7 +5,7 @@ Phase 2C: Anomaly Detection with Strict Multi-Signal Voting Strategy
 
 修订日期：2026-02-27
 修订时间：预计 15:00-16:00
-修订人员：Weng Yonggang
+修订人员：NCT LAB Team
 
 优化策略：
 1. 【策略调整】从"任一信号触发"改为"至少 2 个信号同时触发"
@@ -27,8 +27,7 @@ Phase 2C: Anomaly Detection with Strict Multi-Signal Voting Strategy
    - 避免覆盖之前的实验结果
    - 便于对比分析不同策略
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 27, 2026
 """
 

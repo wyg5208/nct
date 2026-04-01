@@ -8,8 +8,7 @@ Phase 2B: Anomaly Detection with Supervised Threshold Optimization
 2. 为每种异常类型找到最优阈值
 3. 在独立测试集上验证泛化能力
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 27, 2026
 """
 

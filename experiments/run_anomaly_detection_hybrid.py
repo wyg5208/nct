@@ -5,7 +5,7 @@ Phase 2D: Anomaly Detection with Hybrid Voting Strategy
 
 修订日期：2026-02-27
 修订时间：自动记录
-修订人员：Weng Yonggang
+修订人员：NCT LAB Team
 
 优化策略：
 1. 【混合判定逻辑】结合宽松和严格策略的优点
@@ -28,8 +28,7 @@ Phase 2D: Anomaly Detection with Hybrid Voting Strategy
 - Precision：40-45%
 - Recall：50-55%
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 27, 2026
 """
 

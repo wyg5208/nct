@@ -23,7 +23,7 @@ EdNet 数据格式（Kaggle 下载）：
   - p(mastery) 驱动题目难度分配
   - NCT 神经调质状态调整 p(learning) 速率
 
-作者：NeuroConscious Lab / WENG YONGGANG
+作者：NCT LAB Team
 日期：2026-03-15
 """
 

@@ -9,8 +9,7 @@ Phase 2: Complete Anomaly Detection Experiment with NCT
 3. 测试四种异常类型：噪声、旋转、遮挡、OOD
 4. 对比三种检测方法的效果
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 24, 2026
 """
 

@@ -21,7 +21,7 @@ FER2013 数据格式 (Kaggle 下载，CSV 格式)：
   Disgust     ACh    5-HT         # 厌恶/回避
   Neutral     基准 0.5            # 稳   
 
-作者：NeuroConscious Lab / WENG YONGGANG
+作者：NCT LAB Team
 日期   026-03-15
 """
 

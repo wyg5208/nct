@@ -8,8 +8,7 @@ Three complementary approaches:
 2. Φ-value based (Information integration drop)
 3. Salience-based (Feature importance mismatch)
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 24, 2026
 """
 

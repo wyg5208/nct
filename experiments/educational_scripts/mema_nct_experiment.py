@@ -21,7 +21,7 @@ EEG 与神经调质映射（基于神经电生理文献）：
   实验B: Concentrating vs Relaxing 的 Φ 值 t 检验（p<0.05 则显著）
   实验C: 4 种神经调质在 3 类状态下的时序曲线
 
-作者：NeuroConscious Lab / WENG YONGGANG
+作者：NCT LAB Team
 日期：2026-03-15
 """
 

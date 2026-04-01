@@ -5,7 +5,7 @@ Phase 2F: NCT Anomaly Detection - Ensemble Learning
 
 修订日期：2026-02-27
 修订时间：自动记录
-修订人员：Weng Yonggang
+修订人员：NCT LAB Team
 
 核心优化策略：
 1. 【多模型集成】结合 Phase 2B（宽松）和 Phase 2E（自适应）的优势
@@ -27,8 +27,7 @@ Phase 2F: NCT Anomaly Detection - Ensemble Learning
 - 结合 2B 的旋转/遮挡优势 + 2E 的 OOD/噪声优势
 - 提高鲁棒性和泛化能力
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 27, 2026
 """
 

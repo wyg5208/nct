@@ -21,7 +21,7 @@
   --students N Phase 4 EdNet 学生数（默认 30）
   --skip-2    跳过 Phase 2（使用已有 checkpoint）
 
-作者：NeuroConscious Lab / WENG YONGGANG
+作者：NCT LAB Team
 日期：2026-03-15
 """
 

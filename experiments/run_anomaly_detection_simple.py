@@ -8,8 +8,7 @@ Phase 2: Simplified Anomaly Detection with NCT V3 Model
 2. Φ值下降（Information Integration Drop）  
 3. 置信度降低（Classification Confidence Drop）
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 24, 2026
 """
 

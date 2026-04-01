@@ -9,8 +9,7 @@ Phase 3: CIFAR-10 Transfer Learning with NCT V3
 3. Patch size 调整以适应彩色图像
 4. 数据增强：RandomCrop, RandomHorizontalFlip
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 24, 2026
 """
 

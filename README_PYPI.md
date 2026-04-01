@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
 **Version**: v3.2.0 | **版本**: v3.2.0 
-**Author**: WENG YONGGANG(翁勇刚) | **邮箱**: weng@graduate.utm.my,  wyg5208@126.com  
+**Author**: NCT LAB Team  
 
 ---
 
@@ -466,9 +466,7 @@ https://github.com/wyg5208/NCT
 
 ## 👨‍💻 Author & License / 作者与许可
 
-**Author / 作者**: WENG YONGGANG (翁勇刚)  
-**Affiliation / 机构**: Universiti Teknologi Malaysia  
-**Email / 邮箱**: weng@graduate.utm.my, wyg5208@126.com  
+**Author**: NCT LAB Team  
 
 **License / 许可证**: MIT License  
 **Homepage / 官方网站**: https://neuroconscious.link
@@ -495,7 +493,6 @@ This project integrates insights from:
 ## 📬 Contact / 联系
 
 - **GitHub Issues**: https://github.com/wyg5208/NCT/issues
-- **Email**: wyg5208@126.com
 - **PyPI**: https://pypi.org/project/neuroconscious-transformer/
 
 **Welcome to join the NeuroConscious community! 🧠✨**  

@@ -80,7 +80,7 @@ results/
 #docs
 # 内部文档和论文源文件（不公开）
 /docs/
-/MCS-NCT框架理论/docs/
+/MCS-NCT框架理论/
 /experiments/docs/
 /experiments/NCT_value_experiments_design/docs/
 /cats_nct/docs/

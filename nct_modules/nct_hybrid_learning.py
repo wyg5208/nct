@@ -26,7 +26,7 @@ NeuroConscious Transformer - Transformer-STDP Hybrid Learning
 - 比纯 Attention 更节能（稀疏事件驱动更新）
 - 抗遗忘能力更强（双重编码：局部 + 全局）
 
-作者：WENG YONGGANG(翁勇刚)
+作者：NCT LAB Team
 创建：2026 年 2 月 21 日
 版本：v3.1.0
 """

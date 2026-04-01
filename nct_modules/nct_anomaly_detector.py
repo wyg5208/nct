@@ -8,8 +8,7 @@ NCT Batch-Compatible Simplified Model for Anomaly Detection
 2. 使用标准 PyTorch 接口（支持批量处理）
 3. 优化用于异常检测任务
 
-Author: WENG YONGGANG
-Affiliation: NeuroConscious Lab, Universiti Teknologi Malaysia
+Author: NCT LAB Team
 Date: February 24, 2026
 """
 
