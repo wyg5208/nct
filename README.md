@@ -1,15 +1,15 @@
 # 🧠 NeuroConscious Transformer (NCT)
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![PyPI](https://img.shields.io/badge/PyPI-v3.2.0-007396?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/neuroconscious-transformer/)
+[![PyPI](https://img.shields.io/badge/PyPI-v3.2.1-007396?style=for-the-badge&logo=pypi&logoColor=white)](https://pypi.org/project/neuroconscious-transformer/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Transformer](https://img.shields.io/badge/Transformer-Architecture-FF6F00?style=for-the-badge&logo=transformers&logoColor=white)](https://huggingface.co/docs/transformers)
 [![Neuroscience](https://img.shields.io/badge/Neuroscience-Consciousness-4CAF50?style=for-the-badge)](https://en.wikipedia.org/wiki/Consciousness)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
-**Version**: v3.2.0  
+**Version**: v3.2.1  
 **Created**: February 21, 2026  
-**Updated**: March 20, 2026  
+**Updated**: April 18, 2026  
 **Author**: NCT LAB Team  
 
 
@@ -416,6 +416,15 @@ for trial in range(100):
 ---
 
 ## 📝 Changelog
+
+### v3.2.1 (2026-04-18)
+- ✅ Fixed Φ computation mathematical defect: replaced single-sample outer product (rank=1) with batch covariance estimation
+- ✅ Added eigenvalue entropy and energy concentration as auxiliary Φ metrics
+- ✅ Fixed PredictiveHierarchy GPU device mismatch error (causal mask now supports device parameter)
+- ✅ Enhanced Experiment 9: 12 perturbation levels (was 5), 1000 samples (was 200)
+- ✅ Added 5 control groups: Gaussian noise, Shuffle features, Random classifier, Frozen intermediate, Temperature scaling
+- ✅ H4a hypothesis fully passed: all perturbations significantly reduce Φ (p<0.01, r=-0.78~-0.93)
+- ⚠️ **Breaking change**: All experiments using `PhiFromAttention` will produce different results
 
 ### v3.2.0 (2026-03-20)
 - ✅ Added MCS (Multi-Constraint Satisfaction) consciousness modeling framework

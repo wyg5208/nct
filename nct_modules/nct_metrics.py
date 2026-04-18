@@ -158,151 +158,84 @@ class PhiFromAttention(nn.Module):
     def _compute_phi_from_neural_activity(self, neural_activity: torch.Tensor) -> torch.Tensor:
         """从神经活动估计Φ值（当 L=1 时使用）
         
-        关键改进：当 L=1 时，使用 D 维神经活动的内部结构来估计整合信息量
+        改进版v2：修复单样本外积秩=1的数学缺陷，改用批次协方差估计。
+        
+        原理：
+        - 收集批次内所有样本的特征，计算D×D协方差矩阵
+        - 高度整合的系统：特征值集中在少数几个，PR低 → Φ高
+        - 随机/独立的系统：特征值均匀分布，PR高 → Φ低
+        - Φ = 1 - (participation_ratio / D)，归一化到 [0, 1]
         
         Args:
-            neural_activity: [B, L, D] 神经活动
+            neural_activity: [B, L, D] 神经活动（B≥2时计算批次协方差）
         
         Returns:
-            phi_values: [B] Φ值
+            phi_values: [B] Φ值（批次内所有样本共享同一Φ估计）
         """
         B, L, D = neural_activity.shape
-        phi_values = []
         
-        for b in range(B):
-            # 使用神经活动的 D 个维度作为"虚拟节点"
-            activity = neural_activity[b, :, :]  # [L, D]
+        if D < 2 or B < 2:
+            return torch.zeros(B)
+        
+        try:
+            # 提取所有样本的D维特征: [B, D]
+            features = neural_activity.squeeze(1)  # [B, D]
             
-            if D < 2:
-                phi_values.append(0.0)
-                continue
+            # ===== 计算批次协方差矩阵 =====
+            # 中心化
+            feat_mean = features.mean(dim=0, keepdim=True)  # [1, D]
+            feat_centered = features - feat_mean  # [B, D]
             
-            try:
-                # 关键修复：当 L=1 时，使用神经活动的 D 维内部结构
-                if activity.shape[0] < 2:
-                    # L=1 时的特殊处理：使用 D 维向量的内部整合性
-                    logger.debug(f"[PhiFromAttention] L={activity.shape[0]} < 2，使用 D 维内部结构估计Φ")
-                    
-                    # 将 D 维向量视为一个系统的状态，计算其整合性
-                    flat_activity = activity.flatten()  # [D]
-                    
-                    # 方法1：计算活动的稀疏性和均匀性
-                    activity_normalized = (flat_activity - flat_activity.mean()) / (flat_activity.std() + self.epsilon)
-                    
-                    # 计算基于分区的整合信息
-                    # 将 D 维分成多个子组，比较整体统计量与子组统计量
-                    n_groups = min(8, D // 10)  # 至少分成 8 组（如果维度足够）
-                    if n_groups < 2:
-                        n_groups = 2
-                    
-                    group_size = D // n_groups
-                    
-                    # 计算整体的信息熵（用方差代理）
-                    total_var = flat_activity.var().item()
-                    
-                    # 计算各分区的方差
-                    partition_vars = []
-                    for i in range(n_groups):
-                        start_idx = i * group_size
-                        end_idx = start_idx + group_size if i < n_groups - 1 else D
-                        partition = flat_activity[start_idx:end_idx]
-                        partition_vars.append(partition.var().item())
-                    
-                    # Φ近似 = 整体方差 - 分区方差之和的平均 (整合越好，差越大)
-                    avg_partition_var = np.mean(partition_vars)
-                    
-                    # 归一化：使用方差比来估计整合程度
-                    if avg_partition_var > self.epsilon:
-                        integration_ratio = total_var / (avg_partition_var + self.epsilon)
-                        # 将比率映射到 0-1 范围，使用 sigmoid-like 函数
-                        raw_phi = 2.0 / (1.0 + np.exp(-0.5 * (integration_ratio - 1.0))) - 1.0
-                        raw_phi = max(0.05, min(0.5, raw_phi))  # 限制在合理范围
-                    else:
-                        raw_phi = 0.1  # 默认中等整合
-                    
-                    # 方法2：基于激活模式的非均匀性
-                    # 高度整合的系统应该有协调的激活模式
-                    abs_activity = torch.abs(activity_normalized)
-                    top_k = min(50, D // 10)
-                    if top_k > 0:
-                        top_values, _ = torch.topk(abs_activity, top_k)
-                        activation_concentration = top_values.mean().item() / (abs_activity.mean().item() + self.epsilon)
-                        # 激活越集中，整合性越高
-                        concentration_phi = min(0.3, activation_concentration * 0.1)
-                    else:
-                        concentration_phi = 0.1
-                    
-                    # 综合两种方法
-                    final_phi = 0.6 * raw_phi + 0.4 * concentration_phi
-                    
-                    # 添加历史平滑
-                    if hasattr(self, '_phi_history') and len(self._phi_history) > 0:
-                        self._phi_history.append(final_phi)
-                        if len(self._phi_history) > self._max_history:
-                            self._phi_history.pop(0)
-                        alpha = 0.7
-                        smoothed_phi = alpha * final_phi + (1 - alpha) * np.mean(self._phi_history[:-1])
-                    else:
-                        if hasattr(self, '_phi_history'):
-                            self._phi_history = [final_phi]
-                        smoothed_phi = final_phi
-                    
-                    phi_values.append(float(smoothed_phi))
-                    continue
-                
-                # L >= 2 时的标准处理
-                # 使用 Pearson 相关系数
-                activity_centered = activity - activity.mean(dim=0, keepdim=True)
-                std = activity_centered.std(dim=0, keepdim=True) + self.epsilon
-                activity_normalized = activity_centered / std
-                
-                cov_matrix = torch.mm(activity_normalized.t(), activity_normalized) / (activity.shape[0] - 1)
-                
-                # 计算互信息
-                I_total = self._mutual_information(cov_matrix, self.epsilon)
-                
-                # 找最小信息分割
-                min_partition_mi = float('inf')
-                for _ in range(self.n_partitions):
-                    perm = torch.randperm(D)
-                    split = D // 2
-                    
-                    submatrix_a = cov_matrix[perm[:split], :][:, perm[:split]]
-                    submatrix_b = cov_matrix[perm[split:], :][:, perm[split:]]
-                    
-                    mi_a = self._mutual_information(submatrix_a, self.epsilon)
-                    mi_b = self._mutual_information(submatrix_b, self.epsilon)
-                    
-                    min_partition_mi = min(min_partition_mi, mi_a + mi_b)
-                
-                # Φ = I_total - min_partition
-                phi = max(0.0, I_total - min_partition_mi)
-                
-                # 归一化
-                if D > 0:
-                    raw_phi = phi / (D * D / 50.0)
-                    
-                    if hasattr(self, '_phi_history') and len(self._phi_history) > 0:
-                        self._phi_history.append(raw_phi)
-                        if len(self._phi_history) > self._max_history:
-                            self._phi_history.pop(0)
-                        alpha = 0.5
-                        if len(self._phi_history) == 1:
-                            smoothed_phi = raw_phi
-                        else:
-                            prev_ema = np.mean(self._phi_history[:-1])
-                            smoothed_phi = alpha * raw_phi + (1 - alpha) * prev_ema
-                    else:
-                        if hasattr(self, '_phi_history'):
-                            self._phi_history = [raw_phi]
-                        smoothed_phi = raw_phi
-                    
-                    phi_values.append(smoothed_phi)
-                else:
-                    phi_values.append(0.0)
-            except Exception as e:
-                logger.warning(f"[PhiFromAttention] Φ计算失败：{e}，返回 0.1")
-                phi_values.append(0.1)  # 失败时返回中等值而非 0
+            # 协方差矩阵: [D, D]
+            cov_matrix = (feat_centered.T @ feat_centered) / (B - 1)
+            
+            # ===== 特征值分解 =====
+            eigenvalues = torch.linalg.eigvalsh(cov_matrix)  # [D], 升序
+            eigenvalues = eigenvalues.clamp(min=self.epsilon)
+            
+            # ===== Participation Ratio (有效维度) =====
+            sum_eig = eigenvalues.sum()
+            sum_eig_sq = (eigenvalues ** 2).sum()
+            
+            if sum_eig_sq > self.epsilon:
+                participation_ratio = (sum_eig ** 2) / sum_eig_sq
+            else:
+                participation_ratio = torch.tensor(1.0, device=eigenvalues.device)
+            
+            # Φ = 1 - (PR / D)
+            # PR=1 → Φ≈1（完全整合），PR=D → Φ=0（完全独立）
+            raw_phi_eigen = 1.0 - (participation_ratio / D)
+            raw_phi_eigen = max(0.0, min(1.0, float(raw_phi_eigen)))
+            
+            # ===== 辅助指标1：特征值熵 =====
+            # 熵越高表示特征值分布越均匀（整合度低）
+            p = eigenvalues / (sum_eig + self.epsilon)
+            p = p.clamp(min=self.epsilon)
+            eigen_entropy = -(p * torch.log(p)).sum()
+            max_entropy = torch.log(torch.tensor(D, dtype=torch.float32, device=eigenvalues.device))
+            normalized_entropy = eigen_entropy / (max_entropy + self.epsilon)
+            entropy_phi = 1.0 - normalized_entropy  # 熵越低，Φ越高
+            entropy_phi = max(0.0, min(1.0, float(entropy_phi)))
+            
+            # ===== 辅助指标2：Top-K能量集中度 =====
+            top_k = max(1, min(32, D // 4))
+            top_eig, _ = torch.topk(eigenvalues, top_k)
+            energy_concentration = top_eig.sum() / (sum_eig + self.epsilon)
+            # energy_concentration ∈ [top_k/D, 1]，映射到 [0, 0.3]
+            concentration_phi = min(0.3, (energy_concentration - top_k / D) / (1 - top_k / D + self.epsilon) * 0.3)
+            concentration_phi = max(0.0, concentration_phi)
+            
+            # ===== 加权融合 =====
+            # 特征值谱为主（60%），特征值熵为辅（20%），能量集中度为辅（20%）
+            final_phi = 0.6 * raw_phi_eigen + 0.2 * entropy_phi + 0.2 * concentration_phi
+            final_phi = max(0.0, min(1.0, final_phi))
+            
+            # 批次内所有样本共享同一Φ估计
+            phi_values = [final_phi] * B
+            
+        except Exception as e:
+            logger.warning(f"[PhiFromAttention] Φ计算失败：{e}，返回 0.0")
+            phi_values = [0.0] * B
         
         return torch.tensor(phi_values)
     

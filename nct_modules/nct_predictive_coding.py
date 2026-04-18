@@ -119,7 +119,7 @@ class PredictiveCodingDecoder(nn.TransformerDecoder):
         x = sensory_sequence + self.pos_encoding[:, :T, :]
         
         # Step 2: 生成 causal mask（只能看到过去）
-        causal_mask = self._generate_causal_mask(T)
+        causal_mask = self._generate_causal_mask(T, device=sensory_sequence.device)
         
         # Step 3: 处理 memory（decoder-only 模式）
         # 如果 memory=None，使用 x 作为 memory（自注意力）
@@ -141,9 +141,12 @@ class PredictiveCodingDecoder(nn.TransformerDecoder):
         return prediction, hidden_states
     
     @staticmethod
-    def _generate_causal_mask(seq_len: int) -> torch.Tensor:
-        """生成因果掩码（上三角为 -inf）"""
-        mask = torch.triu(torch.ones(seq_len, seq_len), diagonal=1)
+    def _generate_causal_mask(seq_len: int, device: torch.device = None) -> torch.Tensor:
+        """生成因果掩码（上三角为 -inf）
+        
+        修复：支持指定设备，避免GPU/CPU设备不匹配错误。
+        """
+        mask = torch.triu(torch.ones(seq_len, seq_len, device=device), diagonal=1)
         mask = mask.masked_fill(mask == 1, float('-inf'))
         return mask
     
